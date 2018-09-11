@@ -18,6 +18,7 @@ var MAX_LOCATION_Y = 630;
 
 var map = document.querySelector('.map');
 var mapPinsList = document.querySelector('.map__pins');
+var mapFilters = document.querySelector('.map__filters-container');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
@@ -32,7 +33,7 @@ var ads = [
     },
     offers: {
       title: TITLES[0],
-      // address:,
+      address:getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X) + ', ' + getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y),
       price: getRandomNumber(MIN_PRICE, MAX_PRICE),
       type: TYPES[0],
       rooms: getRandomNumber(MIN_ROOMS, MAX_ROOMS),
@@ -80,15 +81,17 @@ var renderPin = function (ad) {
   pinElement.querySelector('img').alt = ad.offers.title;
 
   return pinElement;
-}
+};
 
-var fragmentPin = document.createDocumentFragment();
+var renderMapPins = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderPin(ads[i]));
+  }
+  mapPinsList.appendChild(fragment);
+};
 
-for (var i = 0; i < ads.length; i++) {
-  fragmentPin.appendChild(renderPin(ads[i]));
-}
-
-mapPinsList.appendChild(fragmentPin);
+renderMapPins(ads);
 
 var renderCard = function (ad) {
   var cardElement = cardTemplate.cloneNode(true);
@@ -105,13 +108,16 @@ var renderCard = function (ad) {
   cardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
   return cardElement;
-}
+};
 
-var fragmentCard = document.createDocumentFragment();
+var renderMapCards = function () {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderCard(ads[i]));
+  }
+  // map.appendChild(fragment);
+  map.insertBefore(fragment, mapFilters);
+};
 
-for (var i = 0; i < ads.length; i++) {
-  fragmentCard.appendChild(renderCard(ads[i]));
-}
-
-map.appendChild(fragmentCard);
+renderMapCards(ads);
 
