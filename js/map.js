@@ -22,6 +22,10 @@ var mapFilters = document.querySelector('.map__filters-container');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
+var getRandomValue = function (arr) {
+  return Math.floor(Math.random() * arr.length);
+};
+
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
@@ -29,42 +33,20 @@ var getRandomNumber = function (min, max) {
 var ads = [
   {
     author: {
-      avatar: 'img/avatars/user0' + AVATAR_NUMBERS[0] + '.png'
+      avatar: 'img/avatars/user0' + AVATAR_NUMBERS[getRandomValue(AVATAR_NUMBERS)] + '.png'
     },
     offers: {
-      title: TITLES[0],
-      address:getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X) + ', ' + getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y),
-      price: getRandomNumber(MIN_PRICE, MAX_PRICE),
-      type: TYPES[0],
-      rooms: getRandomNumber(MIN_ROOMS, MAX_ROOMS),
-      guests: getRandomNumber(1, 10),
-      checkin: CHEKINS[0],
-      checkout: CHECKOUTS[0],
-      features: FEATURES[0],
-      description: '',
-      photos: PHOTOS[0],
-    },
-    location: {
-      x: getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X),
-      y: getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y)
-    }
-  },
-  {
-    author: {
-      avatar: 'img/avatars/user0' + AVATAR_NUMBERS[1] + '.png'
-    },
-    offers: {
-      title: TITLES[1],
+      title: TITLES[getRandomValue(TITLES)],
       address: getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X) + ', ' + getRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y),
       price: getRandomNumber(MIN_PRICE, MAX_PRICE),
-      type: TYPES[1],
+      type: TYPES[getRandomValue(TYPES)],
       rooms: getRandomNumber(MIN_ROOMS, MAX_ROOMS),
       guests: getRandomNumber(1, 10),
-      checkin: CHEKINS[1],
-      checkout: CHECKOUTS[1],
-      features: FEATURES[1],
+      checkin: CHEKINS[getRandomValue(CHEKINS)],
+      checkout: CHECKOUTS[getRandomValue(CHECKOUTS)],
+      features: FEATURES[getRandomValue(FEATURES)],
       description: '',
-      photos: PHOTOS[1],
+      photos: PHOTOS[getRandomValue(PHOTOS)],
     },
     location: {
       x: getRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X),
@@ -103,8 +85,10 @@ var renderCard = function (ad) {
   cardTemplate.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offers.checkin + ' , выезд до ' + ad.offers.checkout;
   cardTemplate.querySelector('.popup__features').textContent = ad.offers.features;
   cardTemplate.querySelector('.popup__description').textContent = ad.offers.description;
-  // var popupPhoto = cardElement.querySelector('.popup__photos').querySelector('img').cloneNode(true);
-  // popupPhoto.src = ad.offers.photos;
+  var popupPhoto = cardElement.querySelector('.popup__photos').querySelector('img').cloneNode(true);
+  popupPhoto.src = ad.offers.photos;
+  cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photos').querySelector('img'));
+  cardElement.querySelector('.popup__photos').appendChild(popupPhoto);
   cardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
 
   return cardElement;
