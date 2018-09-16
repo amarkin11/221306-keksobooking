@@ -7,22 +7,27 @@ var MAX_PRICE = 1000000;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 5;
+var MIN_GUEST = 1;
+var MAX_GUEST = 10;
 var CHEKINS = ['12:00', '13:00', '14:00'];
 var CHECKOUTS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var MIN_LOCATION_X = 0;
-var MAX_LOCATION_X = 1200;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+var MIN_LOCATION_X = 0 + PIN_WIDTH;
+var MAX_LOCATION_X = 1200 - PIN_WIDTH;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
-// var PIN_WIDTH = 50;
-// var PIN_HEIGHT = 70;
 
 var map = document.querySelector('.map');
 var mapPinsList = document.querySelector('.map__pins');
 var mapFilters = document.querySelector('.map__filters-container');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var fragment = document.createDocumentFragment();
+
+var ads = [];
 
 var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
@@ -31,6 +36,23 @@ var getRandomInteger = function (min, max) {
 var getRandomValue = function (arr) {
   return arr[getRandomInteger(0, arr.length)];
 };
+
+var generateFeature = function () {
+  var features = [];
+  for (var i = 0; i < FEATURES.length; i++) {
+    features.push(FEATURES[i]);
+  }
+}
+
+var shuffleArray = function (arr) {
+  for (i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var shuffle = arr[i];
+    arr[i] = arr[j];
+    arr[j] = shuffle
+  }
+  return arr;
+}
 
 var generateRandomAd = function () {
   var randomAd = {
@@ -46,19 +68,17 @@ var generateRandomAd = function () {
   randomAd.offer.price = getRandomInteger(MIN_PRICE, MAX_PRICE);
   randomAd.offer.type = getRandomValue(TYPES);
   randomAd.offer.rooms = getRandomInteger(MIN_ROOMS, MAX_ROOMS);
-  randomAd.offer.guests = getRandomInteger(1, 10);
+  randomAd.offer.guests = getRandomInteger(MIN_GUEST, MAX_GUEST);
   randomAd.offer.checkin = getRandomValue(CHEKINS);
   randomAd.offer.checkout = getRandomValue(CHECKOUTS);
-  randomAd.offer.features = FEATURES[i];
+  randomAd.offer.features = generateFeature;
   randomAd.offer.description = '';
-  randomAd.offer.photos = getRandomValue(PHOTOS);
+  // randomAd.offer.photos = shuffleArray(PHOTOS);
   randomAd.location.x = locationX;
   randomAd.location.y = locationY;
 
   return randomAd;
 };
-
-var ads = [];
 
 for (var i = 0; i < 8; i++) {
   ads.push(generateRandomAd());
@@ -74,16 +94,12 @@ var renderPin = function (ad) {
   return pinElement;
 };
 
-var fragment = document.createDocumentFragment();
-
 var createPins = function () {
   for (i = 0; i < ads.length; i++) {
     fragment.appendChild(renderPin(ads[i]));
   }
   mapPinsList.appendChild(fragment);
 };
-
-createPins();
 
 var renderCard = function (ad) {
   var cardElement = cardTemplate.cloneNode(true);
@@ -126,7 +142,7 @@ var renderCard = function (ad) {
 
   cardTemplate.querySelector('.popup__description').textContent = ad.offer.description;
   var popupPhoto = cardElement.querySelector('.popup__photos').querySelector('img').cloneNode(true);
-  popupPhoto.src = ad.offer.photos;
+  // popupPhoto.src = ad.offer.photos;
   cardElement.querySelector('.popup__photos').removeChild(cardElement.querySelector('.popup__photos').querySelector('img'));
   cardElement.querySelector('.popup__photos').appendChild(popupPhoto);
   cardTemplate.querySelector('.popup__avatar').src = ad.author.avatar;
@@ -141,5 +157,6 @@ var createCards = function () {
   map.insertBefore(fragment, mapFilters);
 };
 
+createPins();
 createCards();
 
