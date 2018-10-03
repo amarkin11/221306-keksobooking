@@ -66,21 +66,21 @@ POPUP_PHOTO.width = 45;
 POPUP_PHOTO.height = 40;
 POPUP_PHOTO.alt = 'Фотография жилья';
 
-var getRandomInteger = function(min, max) {
+var getRandomInteger = function (min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-var getRandomValue = function(arr) {
+var getRandomValue = function (arr) {
   return arr[getRandomInteger(0, arr.length)];
 };
 
-var generateFeatureList = function() {
+var generateFeatureList = function () {
   return FEATURES.slice(getRandomInteger(0, FEATURES.length));
 };
 
-var getPopupFeatureList = function(features) {
+var getPopupFeatureList = function (features) {
   var fragment = document.createDocumentFragment();
-  features.forEach(function(feature) {
+  features.forEach(function (feature) {
     var item = FEATURE_TEMPLATE.cloneNode(true);
     item.classList.add('popup__feature--' + feature);
     fragment.appendChild(item);
@@ -88,9 +88,9 @@ var getPopupFeatureList = function(features) {
   return fragment;
 };
 
-var generatePopupPhotos = function(photos) {
+var generatePopupPhotos = function (photos) {
   var fragment = document.createDocumentFragment();
-  photos.forEach(function(photo) {
+  photos.forEach(function (photo) {
     var item = POPUP_PHOTO.cloneNode(true);
     item.src = photo;
     fragment.appendChild(item);
@@ -98,7 +98,7 @@ var generatePopupPhotos = function(photos) {
   return fragment;
 };
 
-var shuffleArray = function(arr) {
+var shuffleArray = function (arr) {
   var newArray = arr.concat();
   var j;
   var x;
@@ -112,7 +112,7 @@ var shuffleArray = function(arr) {
   return newArray;
 };
 
-var generateRandomAd = function(index) {
+var generateRandomAd = function (index) {
   var randomAd = {
     author: {},
     offer: {},
@@ -139,7 +139,7 @@ var generateRandomAd = function(index) {
   return randomAd;
 };
 
-var getAds = function() {
+var getAds = function () {
   var ads = [];
 
   for (var i = 0; i < ADS_AMOUNT; i++) {
@@ -149,7 +149,7 @@ var getAds = function() {
   return ads;
 };
 
-var createCards = function(ad) {
+var createCards = function (ad) {
   var popupCard = CARD_TEMPLATE.cloneNode(true);
 
   popupCard.querySelector('.popup__title').textContent = ad.offer.title;
@@ -179,7 +179,7 @@ var createCards = function(ad) {
   return popupCard;
 };
 
-var renderCards = function(ad) {
+var renderCards = function (ad) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < ad.length; i++) {
     fragment.appendChild(createCards(ad[i]));
@@ -187,7 +187,7 @@ var renderCards = function(ad) {
   MAP.insertBefore(fragment, MAP_FILTERS);
 };
 
-var createPin = function(ad) {
+var createPin = function (ad) {
   var MAP_PIN = MAP_PIN_TEMPLATE.cloneNode(true);
   MAP_PIN.style.left = ad.location.x + 'px';
   MAP_PIN.style.top = ad.location.y + 'px';
@@ -197,7 +197,7 @@ var createPin = function(ad) {
   return MAP_PIN;
 };
 
-var renderPins = function(ad) {
+var renderPins = function (ad) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < ad.length; i++) {
