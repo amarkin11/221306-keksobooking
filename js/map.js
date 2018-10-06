@@ -218,7 +218,7 @@ var renderPins = function (ads) {
   MAP_PINS.appendChild(fragment);
 };
 
-var activePopup = undefined;
+var activePopup;
 
 var hidePopup = function () {
   if (activePopup !== undefined) {
@@ -274,6 +274,4 @@ var onMainPinMouseUp = function () {
 };
 
 PIN_MAIN.addEventListener('mouseup', onMainPinMouseUp);
-
-
 
