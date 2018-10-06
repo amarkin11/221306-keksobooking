@@ -153,7 +153,7 @@ var getAds = function () {
   return ads;
 };
 
-var createCards = function (ad) {
+var createCard = function (ad, index) {
   var popupCard = CARD_TEMPLATE.cloneNode(true);
 
   popupCard.querySelector('.popup__title').textContent = ad.offer.title;
@@ -179,36 +179,72 @@ var createCards = function (ad) {
     .querySelector('.popup__photos')
     .appendChild(generatePopupPhotos(ad.offer.photos));
   popupCard.querySelector('.popup__avatar').src = ad.author.avatar;
+  popupCard.classList.add('visually-hidden');
+  popupCard.dataset.ad = index;
 
   return popupCard;
 };
 
-var renderCards = function (ad) {
+var renderCards = function (ads) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < ad.length; i++) {
-    fragment.appendChild(createCards(ad[i]));
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(createCard(ads[i], i));
   }
   MAP.insertBefore(fragment, MAP_FILTERS);
 };
 
-var createPin = function (ad) {
+var createPin = function (ad, index) {
   var MAP_PIN = MAP_PIN_TEMPLATE.cloneNode(true);
   MAP_PIN.style.left = ad.location.x + 'px';
   MAP_PIN.style.top = ad.location.y + 'px';
   MAP_PIN.querySelector('img').src = ad.author.avatar;
   MAP_PIN.querySelector('img').alt = ad.offer.title;
+  MAP_PIN.dataset.ad = index;
+
+  MAP_PIN.addEventListener('click', function () {
+    showAdPopup(index);
+  });
 
   return MAP_PIN;
 };
 
-var renderPins = function (ad) {
+var renderPins = function (ads) {
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < ad.length; i++) {
-    fragment.appendChild(createPin(ad[i]));
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(createPin(ads[i], i));
   }
 
   MAP_PINS.appendChild(fragment);
+};
+
+var activePopup = undefined;
+
+var hidePopup = function () {
+  if (activePopup !== undefined) {
+    activePopup.classList.add('visually-hidden');
+  }
+};
+
+var showAdPopup = function (index) {
+  hidePopup();
+  var popup = document.querySelector('.popup.visually-hidden[data-ad="' + index + '"]');
+  popup.classList.remove('visually-hidden');
+  activePopup = popup;
+  document.addEventListener('keydown', onKeydownEsc);
+};
+
+var onClosePopupClick = function () {
+  var closePopup = document.querySelectorAll('.popup__close');
+  for (var i = 0; i < closePopup.length; i++) {
+    closePopup[i].addEventListener('click', hidePopup);
+  }
+};
+
+var onKeydownEsc = function (evt) {
+  if (evt.keyCode === 27) {
+    hidePopup();
+  }
 };
 
 var ads = getAds();
@@ -234,7 +270,10 @@ var onMainPinMouseUp = function () {
   renderPins(ads);
   renderCards(ads);
   setAdressValue();
+  onClosePopupClick();
 };
 
 PIN_MAIN.addEventListener('mouseup', onMainPinMouseUp);
+
+
 
