@@ -60,6 +60,8 @@ var PIN_MAIN = document.querySelector('.map__pin--main');
 var AD_FORM = document.querySelector('.ad-form');
 var FIELDSETS = document.querySelectorAll('fieldset');
 var INPUT_ADDRESS = document.querySelector('#address');
+var SELECT_TYPE = document.querySelector('#type');
+var INPUT_PRICE = document.querySelector('#price');
 
 var FEATURE_TEMPLATE = document.createElement('li');
 FEATURE_TEMPLATE.classList.add('popup__feature');
@@ -275,4 +277,23 @@ var onMainPinMouseUp = function () {
 };
 
 PIN_MAIN.addEventListener('mouseup', onMainPinMouseUp);
+
+var getPricePlaceholder = function (value) {
+  INPUT_PRICE.placeholder = value;
+  INPUT_PRICE.setAttribute('minlength', value);
+};
+
+var setSelectType = function () {
+  if (SELECT_TYPE.value === 'bungalo') {
+    getPricePlaceholder('0');
+  } else if (SELECT_TYPE.value === 'flat') {
+    getPricePlaceholder('1000');
+  } else if (SELECT_TYPE.value === 'house') {
+    getPricePlaceholder('5000');
+  } else if (SELECT_TYPE.value === 'palace') {
+    getPricePlaceholder('10000');
+  }
+};
+
+SELECT_TYPE.addEventListener('change', setSelectType);
 
