@@ -220,14 +220,15 @@ var renderPins = function (ads) {
 
 var activePopup;
 
-var hidePopup = function () {
+var hideActivePopup = function () {
   if (activePopup !== undefined) {
     activePopup.classList.add('visually-hidden');
   }
+  document.removeEventListener('keydown', onKeydownEsc);
 };
 
 var showAdPopup = function (index) {
-  hidePopup();
+  hideActivePopup();
   var popup = document.querySelector('.popup.visually-hidden[data-ad="' + index + '"]');
   popup.classList.remove('visually-hidden');
   activePopup = popup;
@@ -237,13 +238,13 @@ var showAdPopup = function (index) {
 var onClosePopupClick = function () {
   var closePopup = document.querySelectorAll('.popup__close');
   for (var i = 0; i < closePopup.length; i++) {
-    closePopup[i].addEventListener('click', hidePopup);
+    closePopup[i].addEventListener('click', hideActivePopup);
   }
 };
 
 var onKeydownEsc = function (evt) {
   if (evt.keyCode === 27) {
-    hidePopup();
+    hideActivePopup();
   }
 };
 
