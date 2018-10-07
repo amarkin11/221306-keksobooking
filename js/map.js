@@ -63,8 +63,8 @@ var INPUT_ADDRESS = document.querySelector('#address');
 var SELECT_TYPE = document.querySelector('#type');
 var INPUT_PRICE = document.querySelector('#price');
 var FIELDSET_TIME = document.querySelector('.ad-form__element--time');
-var SELECT_ROOM_NUMBER = document.querySelector('#room_number');
-var SELECT_CAPACITY = document.querySelector('#capacity');
+// var SELECT_ROOM_NUMBER = document.querySelector('#room_number');
+// var SELECT_CAPACITY = document.querySelector('#capacity');
 
 var FEATURE_TEMPLATE = document.createElement('li');
 FEATURE_TEMPLATE.classList.add('popup__feature');
