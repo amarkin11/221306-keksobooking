@@ -311,4 +311,3 @@ var setSelectTime = function (evt) {
 
 FIELDSET_TIME.addEventListener('change', setSelectTime);
 
-
