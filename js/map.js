@@ -66,8 +66,8 @@ var INPUT_PRICE = document.querySelector('#price');
 var FIELDSET_TIME = document.querySelector('.ad-form__element--time');
 var INPUT_TIME_IN = document.querySelector('#timein');
 var INPUT_TIME_OUT = document.querySelector('#timeout');
-// var SELECT_ROOM_NUMBER = document.querySelector('#room_number');
-// var SELECT_CAPACITY = document.querySelector('#capacity');
+var ROOMS_OPTIONS = document.querySelector('#room_number');
+var CAPACITY_OPTIONS = document.querySelectorAll('#capacity option');
 
 var FEATURE_TEMPLATE = document.createElement('li');
 FEATURE_TEMPLATE.classList.add('popup__feature');
@@ -279,43 +279,43 @@ var onMainPinMouseUp = function () {
   onClosePopupClick();
 };
 
-// PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
-PIN_MAIN.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
+PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
+// PIN_MAIN.addEventListener('mousedown', function (evt) {
+//   evt.preventDefault();
 
-  var startCoords = {
-    x: evt.clientX,
-    y: evt.clientY
-  };
+//   var startCoords = {
+//     x: evt.clientX,
+//     y: evt.clientY
+//   };
 
-  var onMouseMove = function (moveEvt) {
-    moveEvt.preventDefault();
+//   var onMouseMove = function (moveEvt) {
+//     moveEvt.preventDefault();
 
-    var shift = {
-      x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
-    };
+//     var shift = {
+//       x: startCoords.x - moveEvt.clientX,
+//       y: startCoords.y - moveEvt.clientY
+//     };
 
-    startCoords = {
-      x: moveEvt.clientX,
-      y: moveEvt.clientY
-    };
+//     startCoords = {
+//       x: moveEvt.clientX,
+//       y: moveEvt.clientY
+//     };
 
-    PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
-    PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
-  };
+//     PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
+//     PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
+//   };
 
-  var onMouseUp = function (upEvt) {
-    upEvt.preventDefault();
-    onMainPinMouseUp();
+//   var onMouseUp = function (upEvt) {
+//     upEvt.preventDefault();
+//     onMainPinMouseUp();
 
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
-  }
+//     document.removeEventListener('mousemove', onMouseMove);
+//     document.removeEventListener('mouseup', onMouseUp);
+//   }
 
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
-});
+//   document.addEventListener('mousemove', onMouseMove);
+//   document.addEventListener('mouseup', onMouseUp);
+// });
 
 var setMinPrice = function (value) {
   INPUT_PRICE.placeholder = value;
@@ -347,4 +347,20 @@ var setSelectTime = function (evt) {
 };
 
 FIELDSET_TIME.addEventListener('change', setSelectTime);
+
+var onRoomsOptionChange = function (evt) {
+  restrictCapcity(evt.target.value);
+};
+
+var restrictCapcity = function (roomsAmount) {
+  CAPACITY_OPTIONS.forEach(function (option) {
+    var isForGuests = option.value !== '0';
+    var isOptionAvailable = roomsAmount === '100' ? !isForGuests : roomsAmount >= option.value && isForGuests;
+    // console.log(option.value, roomsAmount, isOptionAvailable);
+    option.disabled = !isOptionAvailable;
+    option.selected = isOptionAvailable;
+  });
+};
+
+ROOMS_OPTIONS.addEventListener('change', onRoomsOptionChange);
 
