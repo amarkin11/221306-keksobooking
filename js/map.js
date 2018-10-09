@@ -279,43 +279,43 @@ var onMainPinMouseUp = function () {
   onClosePopupClick();
 };
 
-PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
-// PIN_MAIN.addEventListener('mousedown', function (evt) {
-//   evt.preventDefault();
+// PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
+PIN_MAIN.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
 
-//   var startCoords = {
-//     x: evt.clientX,
-//     y: evt.clientY
-//   };
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
 
-//   var onMouseMove = function (moveEvt) {
-//     moveEvt.preventDefault();
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
 
-//     var shift = {
-//       x: startCoords.x - moveEvt.clientX,
-//       y: startCoords.y - moveEvt.clientY
-//     };
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
 
-//     startCoords = {
-//       x: moveEvt.clientX,
-//       y: moveEvt.clientY
-//     };
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
 
-//     PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
-//     PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
-//   };
+    PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
+    PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
+  };
 
-//   var onMouseUp = function (upEvt) {
-//     upEvt.preventDefault();
-//     onMainPinMouseUp();
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    onMainPinMouseUp();
 
-//     document.removeEventListener('mousemove', onMouseMove);
-//     document.removeEventListener('mouseup', onMouseUp);
-//   }
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  }
 
-//   document.addEventListener('mousemove', onMouseMove);
-//   document.addEventListener('mouseup', onMouseUp);
-// });
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
 var setMinPrice = function (value) {
   INPUT_PRICE.placeholder = value;
