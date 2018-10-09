@@ -40,15 +40,20 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+
+var MAP = document.querySelector('.map');
 var PIN_WIDTH = 50;
 // var PIN_HEIGHT = 70;
-// var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_WIDTH = 65;
 var MIN_LOCATION_X = 0 + PIN_WIDTH;
 var MAX_LOCATION_X = 1200 - PIN_WIDTH;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
+var MAP_X_COORD_MIN = 0 + PIN_MAIN_WIDTH;
+var MAP_X_COORD_MAX = MAP.offsetWidth - PIN_MAIN_WIDTH;
+var MAP_Y_COORD_MIN = MIN_LOCATION_Y;
+var MAP_Y_COORD_MAX = MAX_LOCATION_Y;
 
-var MAP = document.querySelector('.map');
 var MAP_PIN_TEMPLATE = document
   .querySelector('#pin')
   .content.querySelector('.map__pin');
@@ -301,8 +306,15 @@ PIN_MAIN.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
-    PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
-    PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
+    if (!(startCoords.x <= MAP_X_COORD_MIN || startCoords.x >= MAP_X_COORD_MAX)) {
+      PIN_MAIN.style.left = PIN_MAIN.offsetLeft - shift.x + 'px';
+    }
+    if (!(startCoords.y <= MAP_Y_COORD_MIN || startCoords.y >= MAP_Y_COORD_MAX)) {
+      PIN_MAIN.style.top = PIN_MAIN.offsetTop - shift.y + 'px';
+    }
+
+    // PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
+    // PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
   };
 
   var onMouseUp = function (upEvt) {
