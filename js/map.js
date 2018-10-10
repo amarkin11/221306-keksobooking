@@ -49,8 +49,8 @@ var MIN_LOCATION_X = 0 + PIN_WIDTH;
 var MAX_LOCATION_X = 1200 - PIN_WIDTH;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
-var MAP_X_COORD_MIN = 0;
-var MAP_X_COORD_MAX = MAP.offsetWidth - PIN_MAIN_WIDTH;
+var MAP_X_COORD_MIN = MAP.getBoundingClientRect().left + PIN_MAIN_WIDTH / 2;
+var MAP_X_COORD_MAX = MAP.getBoundingClientRect().right - PIN_MAIN_WIDTH / 2;
 var MAP_Y_COORD_MIN = MIN_LOCATION_Y;
 var MAP_Y_COORD_MAX = MAX_LOCATION_Y;
 
@@ -309,21 +309,21 @@ PIN_MAIN.addEventListener('mousedown', function (evt) {
     //   y: moveEvt.clientY
     // };
 
-    // if (!(startCoords.x <= MAP_X_COORD_MIN || startCoords.x >= MAP_X_COORD_MAX)) {
-    //   PIN_MAIN.style.left = PIN_MAIN.offsetLeft - shift.x + 'px';
-    // }
-    // if (!(startCoords.y <= MAP_Y_COORD_MIN || startCoords.y >= MAP_Y_COORD_MAX)) {
-    //   PIN_MAIN.style.top = PIN_MAIN.offsetTop - shift.y + 'px';
-    // }
+    if (!(startCoords.x <= MAP_X_COORD_MIN || startCoords.x >= MAP_X_COORD_MAX)) {
+      PIN_MAIN.style.left = PIN_MAIN.offsetLeft - shift.x + 'px';
+    }
+    if (!(startCoords.y <= MAP_Y_COORD_MIN || startCoords.y >= MAP_Y_COORD_MAX)) {
+      PIN_MAIN.style.top = PIN_MAIN.offsetTop - shift.y + 'px';
+    }
 
     // PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
     // PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
 
-    var offsetX = PIN_MAIN.offsetLeft - shift.x;
-    var offsetY = PIN_MAIN.offsetTop - shift.y;
+    // var offsetX = PIN_MAIN.offsetLeft - shift.x;
+    // var offsetY = PIN_MAIN.offsetTop - shift.y;
 
-    PIN_MAIN.style.left = Math.max(Math.min(offsetX, MAP_X_COORD_MAX), MAP_X_COORD_MIN) + 'px';
-    PIN_MAIN.style.top = Math.max(Math.min(offsetY, MAP_Y_COORD_MAX), MAP_Y_COORD_MIN) + 'px';
+    // PIN_MAIN.style.left = Math.max(Math.min(offsetX, MAP_X_COORD_MAX), MAP_X_COORD_MIN) + 'px';
+    // PIN_MAIN.style.top = Math.max(Math.min(offsetY, MAP_Y_COORD_MAX), MAP_Y_COORD_MIN) + 'px';
   };
 
   var onMouseUp = function (upEvt) {
