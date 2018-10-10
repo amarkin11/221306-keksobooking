@@ -40,15 +40,20 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+
+var MAP = document.querySelector('.map');
 var PIN_WIDTH = 50;
 // var PIN_HEIGHT = 70;
-// var PIN_MAIN_WIDTH = 65;
+var PIN_MAIN_WIDTH = 65;
 var MIN_LOCATION_X = 0 + PIN_WIDTH;
 var MAX_LOCATION_X = 1200 - PIN_WIDTH;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
+var MAP_X_COORD_MIN = MAP.getBoundingClientRect().left + PIN_MAIN_WIDTH / 2;
+var MAP_X_COORD_MAX = MAP.getBoundingClientRect().right - PIN_MAIN_WIDTH / 2;
+var MAP_Y_COORD_MIN = MIN_LOCATION_Y;
+var MAP_Y_COORD_MAX = MAX_LOCATION_Y;
 
-var MAP = document.querySelector('.map');
 var MAP_PIN_TEMPLATE = document
   .querySelector('#pin')
   .content.querySelector('.map__pin');
@@ -279,43 +284,59 @@ var onMainPinMouseUp = function () {
   onClosePopupClick();
 };
 
-PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
-// PIN_MAIN.addEventListener('mousedown', function (evt) {
-//   evt.preventDefault();
+// PIN_MAIN.addEventListener('mousedown', onMainPinMouseUp);
+PIN_MAIN.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
 
-//   var startCoords = {
-//     x: evt.clientX,
-//     y: evt.clientY
-//   };
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
 
-//   var onMouseMove = function (moveEvt) {
-//     moveEvt.preventDefault();
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
 
-//     var shift = {
-//       x: startCoords.x - moveEvt.clientX,
-//       y: startCoords.y - moveEvt.clientY
-//     };
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
 
-//     startCoords = {
-//       x: moveEvt.clientX,
-//       y: moveEvt.clientY
-//     };
+    startCoords.x = moveEvt.clientX;
+    startCoords.y = moveEvt.clientY;
 
-//     PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
-//     PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
-//   };
+    // startCoords = {
+    //   x: moveEvt.clientX,
+    //   y: moveEvt.clientY
+    // };
 
-//   var onMouseUp = function (upEvt) {
-//     upEvt.preventDefault();
-//     onMainPinMouseUp();
+    if (!(startCoords.x <= MAP_X_COORD_MIN || startCoords.x >= MAP_X_COORD_MAX)) {
+      PIN_MAIN.style.left = PIN_MAIN.offsetLeft - shift.x + 'px';
+    }
+    if (!(startCoords.y <= MAP_Y_COORD_MIN || startCoords.y >= MAP_Y_COORD_MAX)) {
+      PIN_MAIN.style.top = PIN_MAIN.offsetTop - shift.y + 'px';
+    }
 
-//     document.removeEventListener('mousemove', onMouseMove);
-//     document.removeEventListener('mouseup', onMouseUp);
-//   }
+    // PIN_MAIN.style.left = (PIN_MAIN.offsetLeft - shift.x) + 'px';
+    // PIN_MAIN.style.top = (PIN_MAIN.offsetTop - shift.y) + 'px';
 
-//   document.addEventListener('mousemove', onMouseMove);
-//   document.addEventListener('mouseup', onMouseUp);
-// });
+    // var offsetX = PIN_MAIN.offsetLeft - shift.x;
+    // var offsetY = PIN_MAIN.offsetTop - shift.y;
+
+    // PIN_MAIN.style.left = Math.max(Math.min(offsetX, MAP_X_COORD_MAX), MAP_X_COORD_MIN) + 'px';
+    // PIN_MAIN.style.top = Math.max(Math.min(offsetY, MAP_Y_COORD_MAX), MAP_Y_COORD_MIN) + 'px';
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    onMainPinMouseUp();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
 
 var setMinPrice = function (value) {
   INPUT_PRICE.placeholder = value;
