@@ -32,8 +32,16 @@
     window.filter.enableFilter();
   };
 
+  var removePins = function () {
+    document.querySelectorAll('.map__pin[data-ad]').forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
   window.pin = {
-    renderPins: renderPins
+    MAP_PINS: MAP_PINS,
+    renderPins: renderPins,
+    removePins: removePins
   };
 })();
 

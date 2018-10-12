@@ -47,7 +47,7 @@
   var MAX_LOCATION_Y = 630;
 
   var generateFeatureList = function () {
-    return FEATURES.slice(window.util.getRandomInteger(0, FEATURES.length));
+    return FEATURES.slice(window.utils.getRandomInteger(0, FEATURES.length));
   };
 
   var generateRandomAd = function (index) {
@@ -59,20 +59,20 @@
     randomAd.author.avatar = 'img/avatars/user0' + (index + 1) + '.png';
     randomAd.offer.title = TITLES[index];
     randomAd.offer.address =
-      window.util.getRandomInteger(MIN_LOCATION_X, MAX_LOCATION_X) +
+      window.utils.getRandomInteger(MIN_LOCATION_X, MAX_LOCATION_X) +
       ', ' +
-      window.util.getRandomInteger(MIN_LOCATION_Y, MAX_LOCATION_Y);
-    randomAd.offer.price = window.util.getRandomInteger(MIN_PRICE, MAX_PRICE);
-    randomAd.offer.type = window.util.getRandomValue(TYPES);
-    randomAd.offer.rooms = window.util.getRandomInteger(MIN_ROOMS, MAX_ROOMS);
-    randomAd.offer.guests = window.util.getRandomInteger(MIN_GUEST, MAX_GUEST);
-    randomAd.offer.checkin = window.util.getRandomValue(CHEKINS);
-    randomAd.offer.checkout = window.util.getRandomValue(CHECKOUTS);
+      window.utils.getRandomInteger(MIN_LOCATION_Y, MAX_LOCATION_Y);
+    randomAd.offer.price = window.utils.getRandomInteger(MIN_PRICE, MAX_PRICE);
+    randomAd.offer.type = window.utils.getRandomValue(TYPES);
+    randomAd.offer.rooms = window.utils.getRandomInteger(MIN_ROOMS, MAX_ROOMS);
+    randomAd.offer.guests = window.utils.getRandomInteger(MIN_GUEST, MAX_GUEST);
+    randomAd.offer.checkin = window.utils.getRandomValue(CHEKINS);
+    randomAd.offer.checkout = window.utils.getRandomValue(CHECKOUTS);
     randomAd.offer.features = generateFeatureList();
     randomAd.offer.description = '';
-    randomAd.offer.photos = window.util.shuffleArray(PHOTOS);
-    randomAd.location.x = window.util.getRandomInteger(MIN_LOCATION_X, MAX_LOCATION_X);
-    randomAd.location.y = window.util.getRandomInteger(MIN_LOCATION_Y, MAX_LOCATION_Y);
+    randomAd.offer.photos = window.utils.shuffleArray(PHOTOS);
+    randomAd.location.x = window.utils.getRandomInteger(MIN_LOCATION_X, MAX_LOCATION_X);
+    randomAd.location.y = window.utils.getRandomInteger(MIN_LOCATION_Y, MAX_LOCATION_Y);
 
     return randomAd;
   };

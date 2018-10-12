@@ -23,10 +23,19 @@
     return newArray;
   };
 
-  window.util = {
+  var lastTimeout;
+  var debounce = function (func, timeout) {
+    if (lastTimeout) {
+      clearTimeout(lastTimeout);
+    }
+    lastTimeout = setTimeout(func, timeout);
+  };
+
+  window.utils = {
     getRandomInteger: getRandomInteger,
     getRandomValue: getRandomValue,
-    shuffleArray: shuffleArray
+    shuffleArray: shuffleArray,
+    debounce: debounce
   };
 })();
 

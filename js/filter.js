@@ -37,10 +37,10 @@
 
   var applyFilter = function (offers) {
     var filtredOffers = filterOffers(offers);
-    window.offerCard.closeOfferPopup();
-    window.pins.removePins();
-    var pins = window.pins.generatePins(filtredOffers);
-    window.pins.MAP_PINS.appendChild(pins);
+    // window.offerCard.closeOfferPopup();
+    window.pin.removePins();
+    var pins = window.pin.renderPins(filtredOffers);
+    window.pin.MAP_PINS.appendChild(pins);
   };
 
   var removeFeature = function (feature) {
@@ -111,9 +111,9 @@
     if (target.classList.contains('map__checkbox') && evt.code === 'Enter') {
       target.checked = !target.checked;
     }
-    return window.util.debounce(function () {
+    return window.utils.debounce(function () {
       setFilterCriteria(target);
-      applyFilter(window.offers);
+      applyFilter(window.data.ads);
     }, FILTER_TIMEOUT);
   };
 
