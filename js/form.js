@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function () {
   var AD_FORM = document.querySelector('.ad-form');
   var FIELDSETS = document.querySelectorAll('fieldset');
   var INPUT_ADDRESS = document.querySelector('#address');
@@ -19,7 +19,7 @@
     palace: 10000
   };
 
-  var setAppInitialState = function() {
+  var setAppInitialState = function () {
     AD_FORM.reset();
     window.map.setMainPinToInitialPosition();
     window.card.closeAdPopup();
@@ -28,45 +28,45 @@
     disableForm();
   };
 
-  var disableForm = function() {
+  var disableForm = function () {
     AD_FORM.classList.add('ad-form--disabled');
-    FIELDSETS.forEach(function(fieldset) {
+    FIELDSETS.forEach(function (fieldset) {
       fieldset.disabled = true;
     });
   };
 
-  var enableForm = function() {
+  var enableForm = function () {
     AD_FORM.classList.remove('ad-form--disabled');
-    FIELDSETS.forEach(function(fieldset) {
+    FIELDSETS.forEach(function (fieldset) {
       fieldset.disabled = false;
     });
     restrictCapcity(ROOMS_OPTIONS.value);
   };
 
-  var setAdressValue = function(address) {
+  var setAdressValue = function (address) {
     if (INPUT_ADDRESS.value === '') {
       INPUT_ADDRESS.defaultValue = address;
     }
     INPUT_ADDRESS.value = address;
   };
 
-  var onSelectTypeChange = function() {
+  var onSelectTypeChange = function () {
     var minPrice = MinPrice[SELECT_TYPE.value];
     INPUT_PRICE.placeholder = minPrice;
     INPUT_PRICE.min = minPrice;
   };
 
-  var onTimeChange = function(evt) {
+  var onTimeChange = function (evt) {
     INPUT_TIME_IN.value = evt.target.value;
     INPUT_TIME_OUT.value = evt.target.value;
   };
 
-  var onRoomsOptionChange = function(evt) {
+  var onRoomsOptionChange = function (evt) {
     restrictCapcity(evt.target.value);
   };
 
-  var restrictCapcity = function(roomsAmount) {
-    CAPACITY_OPTIONS.forEach(function(option) {
+  var restrictCapcity = function (roomsAmount) {
+    CAPACITY_OPTIONS.forEach(function (option) {
       var isForGuests = option.value !== '0';
       var isOptionAvailable =
         roomsAmount === '100'
@@ -77,18 +77,14 @@
     });
   };
 
-  var formSuccessUpload = function() {
+  var formSuccessUpload = function () {
     setAppInitialState();
     window.backend.showSuccessMessage();
   };
 
-  var onFormSubmit = function(evt) {
+  var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.backend.upload(
-      new FormData(AD_FORM),
-      formSuccessUpload,
-      window.backend.showErrorMessage
-    );
+    window.backend.upload(new FormData(AD_FORM), formSuccessUpload, window.backend.showErrorMessage);
   };
 
   SELECT_TYPE.addEventListener('change', onSelectTypeChange);

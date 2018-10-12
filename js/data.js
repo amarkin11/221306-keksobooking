@@ -1,15 +1,13 @@
 'use strict';
 
-(function() {
-  var onDataLoad = function(ads) {
+(function () {
+  var onDataLoad = function (ads) {
     if (!window.data.ads) {
       window.data.ads = ads;
     }
   };
 
-  window.backend.load(onDataLoad, function() {
-    console.log('ERROR HAPPENED');
-  });
+  window.backend.load(onDataLoad, window.backend.showErrorMessage);
 
   window.data = {
     ads: undefined

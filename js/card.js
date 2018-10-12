@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function () {
   var activePopup;
 
   var OFFER_TYPES = {
@@ -23,9 +23,9 @@
   POPUP_PHOTO.height = 40;
   POPUP_PHOTO.alt = 'Фотография жилья';
 
-  var getPopupFeatureList = function(features) {
+  var getPopupFeatureList = function (features) {
     var fragment = document.createDocumentFragment();
-    features.forEach(function(feature) {
+    features.forEach(function (feature) {
       var item = FEATURE_TEMPLATE.cloneNode(true);
       item.classList.add('popup__feature--' + feature);
       fragment.appendChild(item);
@@ -33,9 +33,9 @@
     return fragment;
   };
 
-  var generatePopupPhotos = function(photos) {
+  var generatePopupPhotos = function (photos) {
     var fragment = document.createDocumentFragment();
-    photos.forEach(function(photo) {
+    photos.forEach(function (photo) {
       var item = POPUP_PHOTO.cloneNode(true);
       item.src = photo;
       fragment.appendChild(item);
@@ -43,7 +43,7 @@
     return fragment;
   };
 
-  var createPopup = function(ad) {
+  var createPopup = function (ad) {
     var popupCard = CARD_TEMPLATE.cloneNode(true);
 
     popupCard.querySelector('.popup__title').textContent = ad.offer.title;
@@ -77,29 +77,29 @@
     return popupCard;
   };
 
-  var renderPopup = function(popup) {
+  var renderPopup = function (popup) {
     window.map.MAP.insertBefore(popup, window.map.MAP_FILTERS);
   };
 
-  var closeAdPopup = function() {
+  var closeAdPopup = function () {
     if (activePopup !== undefined) {
       activePopup.remove();
     }
     document.removeEventListener('keydown', onEscKeydown);
   };
 
-  var showAdPopup = function(ad) {
+  var showAdPopup = function (ad) {
     closeAdPopup();
     activePopup = createPopup(ad);
     renderPopup(activePopup);
     document.addEventListener('keydown', onEscKeydown);
   };
 
-  var onClosePopupClick = function() {
+  var onClosePopupClick = function () {
     closeAdPopup();
   };
 
-  var onEscKeydown = function(evt) {
+  var onEscKeydown = function (evt) {
     if (evt.keyCode === 27) {
       closeAdPopup();
     }

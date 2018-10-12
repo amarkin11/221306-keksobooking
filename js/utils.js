@@ -1,7 +1,7 @@
 'use strict';
 
-(function() {
-  var shuffleArray = function(arr) {
+(function () {
+  var shuffleArray = function (arr) {
     var newArray = arr.concat();
     var j;
     var x;
@@ -16,7 +16,7 @@
   };
 
   var lastTimeout;
-  var debounce = function(func, timeout) {
+  var debounce = function (func, timeout) {
     if (lastTimeout) {
       clearTimeout(lastTimeout);
     }
