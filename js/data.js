@@ -96,3 +96,4 @@
     MAX_LOCATION_Y: MAX_LOCATION_Y
   };
 })();
+

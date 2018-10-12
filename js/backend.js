@@ -8,7 +8,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.addEventLIstener('load', function () {
+    xhr.addEventListener('load', function () {
       onLoad(xhr.response);
     });
 
@@ -20,7 +20,7 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.addEventLIstener('load', function () {
+    xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onLoad(xhr.response);
       } else {
@@ -28,11 +28,11 @@
       }
     });
 
-    xhr.addEventLIstener('error', function () {
+    xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
 
-    xhr.addEventLIstener('timeout', function () {
+    xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
@@ -45,7 +45,6 @@
   var MAIN_BLOCK = document.querySelector('main');
   var SUCCESS_MESSAGE_TEMPLATE = document.querySelector('#success').content.querySelector('.success');
   var ERROR_MESSAGE_TEMPLATE = document.querySelector('#error').content.querySelector('.error');
-  // var ERROR_BUTTON = document.querySelector('#error').content.querySelector('.error__button');
 
   var createSuccessMessage = function () {
     var successMessage = SUCCESS_MESSAGE_TEMPLATE.cloneNode(true);
@@ -65,9 +64,6 @@
 
   var showErrorMessage = function () {
     createErrorMessage();
-    // document.addEventListener('keydown', onEscKeydown);
-    // window.addEventListener('click', onClickWindow);
-    // ERROR_BUTTON.addEventListener('click', onClickButtonError);
   };
 
   var onEscKeydown = function (evt) {
@@ -82,18 +78,10 @@
     document.removeEventListener('click', onClickWindow);
   };
 
-  // var onClickButtonError = function () {
-  //   MAIN_BLOCK.removeChild(document.querySelector('.error'));
-  //   console.log('rabotai');
-  // };
-
   window.backend = {
     upload: upload,
     load: load,
     showSuccessMessage: showSuccessMessage,
     showErrorMessage: showErrorMessage
   };
-
-  // showErrorMessage();
-  // showSuccessMessage();
 })();

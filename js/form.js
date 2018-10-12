@@ -64,8 +64,9 @@
   ROOMS_OPTIONS.addEventListener('change', onRoomsOptionChange);
 
   AD_FORM.addEventListener('submit', function (evt) {
-    window.backend.upload(new FormData(AD_FORM), window.backend.showSuccessMessage, window.beckend.showErrorMessage);
     evt.preventDefault();
+    window.backend.upload(new FormData(AD_FORM), window.backend.showSuccessMessage, window.backend.showErrorMessage);
+    AD_FORM.reset();
   });
 
   BUTTON_FORM_RESET.addEventListener('click', function () {
@@ -78,3 +79,4 @@
     setAdressValue: setAdressValue
   };
 })();
+
