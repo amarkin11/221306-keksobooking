@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function() {
   var activePopup;
 
   var OFFER_TYPES = {
@@ -23,9 +23,9 @@
   POPUP_PHOTO.height = 40;
   POPUP_PHOTO.alt = 'Фотография жилья';
 
-  var getPopupFeatureList = function (features) {
+  var getPopupFeatureList = function(features) {
     var fragment = document.createDocumentFragment();
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       var item = FEATURE_TEMPLATE.cloneNode(true);
       item.classList.add('popup__feature--' + feature);
       fragment.appendChild(item);
@@ -33,9 +33,9 @@
     return fragment;
   };
 
-  var generatePopupPhotos = function (photos) {
+  var generatePopupPhotos = function(photos) {
     var fragment = document.createDocumentFragment();
-    photos.forEach(function (photo) {
+    photos.forEach(function(photo) {
       var item = POPUP_PHOTO.cloneNode(true);
       item.src = photo;
       fragment.appendChild(item);
@@ -43,7 +43,7 @@
     return fragment;
   };
 
-  var createCard = function (ad, index) {
+  var createPopup = function(ad) {
     var popupCard = CARD_TEMPLATE.cloneNode(true);
 
     popupCard.querySelector('.popup__title').textContent = ad.offer.title;
@@ -69,52 +69,45 @@
       .querySelector('.popup__photos')
       .appendChild(generatePopupPhotos(ad.offer.photos));
     popupCard.querySelector('.popup__avatar').src = ad.author.avatar;
-    popupCard.classList.add('visually-hidden');
-    popupCard.dataset.ad = index;
+
+    popupCard
+      .querySelector('.popup__close')
+      .addEventListener('click', onClosePopupClick);
 
     return popupCard;
   };
 
-  var renderCards = function (ads) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < ads.length; i++) {
-      fragment.appendChild(createCard(ads[i], i));
-    }
-    window.map.MAP.insertBefore(fragment, window.map.MAP_FILTERS);
+  var renderPopup = function(popup) {
+    window.map.MAP.insertBefore(popup, window.map.MAP_FILTERS);
   };
 
-  var hideActivePopup = function () {
+  var closeAdPopup = function() {
     if (activePopup !== undefined) {
-      activePopup.classList.add('visually-hidden');
+      activePopup.remove();
     }
     document.removeEventListener('keydown', onEscKeydown);
   };
 
-  var showAdPopup = function (index) {
-    hideActivePopup();
-    var popup = document.querySelector('.popup.visually-hidden[data-ad="' + index + '"]');
-    popup.classList.remove('visually-hidden');
-    activePopup = popup;
+  var showAdPopup = function(ad) {
+    closeAdPopup();
+    activePopup = createPopup(ad);
+    renderPopup(activePopup);
     document.addEventListener('keydown', onEscKeydown);
   };
 
-  var onClosePopupClick = function () {
-    var closePopup = document.querySelectorAll('.popup__close');
-    for (var i = 0; i < closePopup.length; i++) {
-      closePopup[i].addEventListener('click', hideActivePopup);
-    }
+  var onClosePopupClick = function() {
+    closeAdPopup();
   };
 
-  var onEscKeydown = function (evt) {
+  var onEscKeydown = function(evt) {
     if (evt.keyCode === 27) {
-      hideActivePopup();
+      closeAdPopup();
     }
   };
 
   window.card = {
-    renderCards: renderCards,
-    showAdPopup: showAdPopup,
-    onClosePopupClick: onClosePopupClick
+    closeAdPopup: closeAdPopup,
+    renderCards: renderPopup,
+    showAdPopup: showAdPopup
   };
 })();
-

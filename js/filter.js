@@ -1,9 +1,8 @@
 'use strict';
 
-(function () {
+(function() {
   var FILTER = document.querySelector('.map__filters');
   var FILTER_TIMEOUT = 500;
-  var FILTER_MAX_RESULT = 5;
   var COMMODITY_FILTERS = ['type', 'rooms', 'guests'];
 
   var Price = {
@@ -19,7 +18,7 @@
     features: []
   };
 
-  var disableFliter = function () {
+  var disableFilter = function() {
     for (var i = 0; i < FILTER.elements.length; i++) {
       FILTER.elements[i].disabled = true;
     }
@@ -27,48 +26,50 @@
     FILTER.removeEventListener('keydown', onFilterChange);
   };
 
-  var enableFilter = function () {
+  var enableFilter = function() {
     for (var i = 0; i < FILTER.elements.length; i++) {
       FILTER.elements[i].disabled = false;
     }
+
     FILTER.addEventListener('change', onFilterChange);
     FILTER.addEventListener('keydown', onFilterChange);
   };
 
-  var applyFilter = function (offers) {
+  var applyFilter = function(offers) {
     var filtredOffers = filterOffers(offers);
-    // window.offerCard.closeOfferPopup();
-    window.pin.removePins();
-    var pins = window.pin.renderPins(filtredOffers);
-    window.pin.MAP_PINS.appendChild(pins);
+    window.card.closeAdPopup();
+    window.pins.removePins();
+    window.pins.renderPins(filtredOffers);
   };
 
-  var removeFeature = function (feature) {
+  var removeFeature = function(feature) {
     filterCriteria.features.splice(filterCriteria.features.indexOf(feature), 1);
   };
 
-  var filterFeatures = function (offers) {
+  var filterFeatures = function(offers) {
     if (filterCriteria.features.length === 0) {
       return offers;
     }
 
-    return offers.filter(function (offerItem) {
-      return filterCriteria.features.every(function (feature) {
+    return offers.filter(function(offerItem) {
+      return filterCriteria.features.every(function(feature) {
         return offerItem.offer.features.indexOf(feature) !== -1;
       });
     });
   };
 
-  var filterSelect = function (offers) {
-    return COMMODITY_FILTERS.reduce(function (acc, currentFilter) {
-      return filterCriteria[currentFilter] === 'any' ? acc : acc.filter(function (it) {
-        return it.offer[currentFilter] === filterCriteria[currentFilter];
-      });
+  var filterSelect = function(offers) {
+    return COMMODITY_FILTERS.reduce(function(acc, currentFilter) {
+      return filterCriteria[currentFilter] === 'any'
+        ? acc
+        : acc.filter(function(it) {
+            return it.offer[currentFilter] === filterCriteria[currentFilter];
+          });
     }, offers);
   };
 
-  var filterPrice = function (offers) {
-    return offers.filter(function (elem) {
+  var filterPrice = function(offers) {
+    return offers.filter(function(elem) {
       switch (filterCriteria.price) {
         case 'low':
           return elem.offer.price <= Price.low;
@@ -82,14 +83,14 @@
     });
   };
 
-  var filterOffers = function (offers) {
+  var filterOffers = function(offers) {
     var res = filterSelect(offers);
     res = filterPrice(res);
     res = filterFeatures(res);
-    return res.slice(0, FILTER_MAX_RESULT);
+    return res;
   };
 
-  var setFilterCriteria = function (filterNode) {
+  var setFilterCriteria = function(filterNode) {
     var filterKey = filterNode.id.split('-')[1];
 
     if (filterNode.tagName === 'SELECT') {
@@ -106,20 +107,21 @@
     }
   };
 
-  var onFilterChange = function (evt) {
+  var onFilterChange = function(evt) {
     var target = evt.target;
     if (target.classList.contains('map__checkbox') && evt.code === 'Enter') {
       target.checked = !target.checked;
     }
-    return window.utils.debounce(function () {
+    return window.utils.debounce(function() {
       setFilterCriteria(target);
       applyFilter(window.data.ads);
     }, FILTER_TIMEOUT);
   };
 
+  disableFilter();
+
   window.filter = {
-    disableFliter: disableFliter,
+    disableFilter: disableFilter,
     enableFilter: enableFilter
   };
 })();
-
