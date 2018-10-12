@@ -1,9 +1,6 @@
 'use strict';
 
 (function () {
-  // var PIN_WIDTH = 50;
-  // var PIN_HEIGHT = 70;
-  // var PIN_MAIN_WIDTH = 65;
   var MAP_PIN_TEMPLATE = document
     .querySelector('#pin')
     .content.querySelector('.map__pin');
@@ -32,12 +29,19 @@
     }
 
     MAP_PINS.appendChild(fragment);
+    window.filter.enableFilter();
+  };
+
+  var removePins = function () {
+    document.querySelectorAll('.map__pin[data-ad]').forEach(function (pin) {
+      pin.remove();
+    });
   };
 
   window.pin = {
-    // PIN_WIDTH : PIN_WIDTH,
-    // PIN_MAIN_WIDTH : PIN_MAIN_WIDTH,
-    renderPins: renderPins
+    MAP_PINS: MAP_PINS,
+    renderPins: renderPins,
+    removePins: removePins
   };
-
 })();
+

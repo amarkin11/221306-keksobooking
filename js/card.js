@@ -112,9 +112,9 @@
   };
 
   window.card = {
-    // generateFeatureList : generateFeatureList
     renderCards: renderCards,
     showAdPopup: showAdPopup,
     onClosePopupClick: onClosePopupClick
   };
 })();
+
