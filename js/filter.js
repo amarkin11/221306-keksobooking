@@ -3,7 +3,6 @@
 (function () {
   var FILTER = document.querySelector('.map__filters');
   var FILTER_TIMEOUT = 500;
-  var FILTER_MAX_RESULT = 5;
   var COMMODITY_FILTERS = ['type', 'rooms', 'guests'];
 
   var Price = {
@@ -19,7 +18,7 @@
     features: []
   };
 
-  var disableFliter = function () {
+  var disableFilter = function () {
     for (var i = 0; i < FILTER.elements.length; i++) {
       FILTER.elements[i].disabled = true;
     }
@@ -31,16 +30,16 @@
     for (var i = 0; i < FILTER.elements.length; i++) {
       FILTER.elements[i].disabled = false;
     }
+
     FILTER.addEventListener('change', onFilterChange);
     FILTER.addEventListener('keydown', onFilterChange);
   };
 
   var applyFilter = function (offers) {
     var filtredOffers = filterOffers(offers);
-    // window.offerCard.closeOfferPopup();
-    window.pin.removePins();
-    var pins = window.pin.renderPins(filtredOffers);
-    window.pin.MAP_PINS.appendChild(pins);
+    window.card.closeAdPopup();
+    window.pins.removePins();
+    window.pins.renderPins(filtredOffers);
   };
 
   var removeFeature = function (feature) {
@@ -61,9 +60,11 @@
 
   var filterSelect = function (offers) {
     return COMMODITY_FILTERS.reduce(function (acc, currentFilter) {
-      return filterCriteria[currentFilter] === 'any' ? acc : acc.filter(function (it) {
-        return it.offer[currentFilter] === filterCriteria[currentFilter];
-      });
+      return filterCriteria[currentFilter] === 'any'
+        ? acc
+        : acc.filter(function (it) {
+          return it.offer[currentFilter] === filterCriteria[currentFilter];
+        });
     }, offers);
   };
 
@@ -86,7 +87,7 @@
     var res = filterSelect(offers);
     res = filterPrice(res);
     res = filterFeatures(res);
-    return res.slice(0, FILTER_MAX_RESULT);
+    return res;
   };
 
   var setFilterCriteria = function (filterNode) {
@@ -117,9 +118,10 @@
     }, FILTER_TIMEOUT);
   };
 
+  disableFilter();
+
   window.filter = {
-    disableFliter: disableFliter,
+    disableFilter: disableFilter,
     enableFilter: enableFilter
   };
 })();
-

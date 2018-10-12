@@ -1,14 +1,6 @@
 'use strict';
 
 (function () {
-  var getRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  };
-
-  var getRandomValue = function (arr) {
-    return arr[getRandomInteger(0, arr.length)];
-  };
-
   var shuffleArray = function (arr) {
     var newArray = arr.concat();
     var j;
@@ -32,10 +24,7 @@
   };
 
   window.utils = {
-    getRandomInteger: getRandomInteger,
-    getRandomValue: getRandomValue,
     shuffleArray: shuffleArray,
     debounce: debounce
   };
 })();
-
