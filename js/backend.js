@@ -3,13 +3,46 @@
 (function () {
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
+  var MAIN_BLOCK = document.querySelector('main');
+  var SUCCESS_MESSAGE_TEMPLATE = document
+    .querySelector('#success')
+    .content.querySelector('.success');
+  var ERROR_MESSAGE_TEMPLATE = document
+    .querySelector('#error')
+    .content.querySelector('.error');
+  var REQUEST_TIMEOUT = 10000;
+  var Code = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+    SERVER_ERROR: 500
+  };
+
+  var ESC_KEYCODE = 27;
 
   var upload = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.addEventLIstener('load', function () {
-      onLoad(xhr.response);
+    xhr.addEventListener('load', function () {
+      var error;
+      switch (xhr.status) {
+        case Code.SUCCESS:
+          onLoad(xhr.response);
+          break;
+        case Code.BAD_REQUEST:
+        case Code.NOT_FOUND:
+        case Code.SERVER_ERROR:
+        default:
+          error = 'Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText;
+      }
+      if (error) {
+        onError(error);
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
     });
 
     xhr.open('POST', URL_UPLOAD);
@@ -20,42 +53,26 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    xhr.addEventLIstener('load', function () {
-      if (xhr.status === 200) {
+    xhr.addEventListener('load', function () {
+      if (xhr.status === Code.SUCCESS) {
         onLoad(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
-    xhr.addEventLIstener('error', function () {
+    xhr.addEventListener('error', function () {
       onError('Произошла ошибка соединения');
     });
 
-    xhr.addEventLIstener('timeout', function () {
+    xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = REQUEST_TIMEOUT;
 
     xhr.open('GET', URL_LOAD);
     xhr.send();
-  };
-
-  var MAIN_BLOCK = document.querySelector('main');
-  var SUCCESS_MESSAGE_TEMPLATE = document.querySelector('#success').content.querySelector('.success');
-  var ERROR_MESSAGE_TEMPLATE = document.querySelector('#error').content.querySelector('.error');
-  // var ERROR_BUTTON = document.querySelector('#error').content.querySelector('.error__button');
-
-  var createSuccessMessage = function () {
-    var successMessage = SUCCESS_MESSAGE_TEMPLATE.cloneNode(true);
-    MAIN_BLOCK.appendChild(successMessage);
-  };
-
-  var showSuccessMessage = function () {
-    createSuccessMessage();
-    document.addEventListener('keydown', onEscKeydown);
-    document.addEventListener('click', onClickWindow);
   };
 
   var createErrorMessage = function () {
@@ -65,27 +82,28 @@
 
   var showErrorMessage = function () {
     createErrorMessage();
-    // document.addEventListener('keydown', onEscKeydown);
-    // window.addEventListener('click', onClickWindow);
-    // ERROR_BUTTON.addEventListener('click', onClickButtonError);
   };
 
   var onEscKeydown = function (evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === ESC_KEYCODE) {
       MAIN_BLOCK.removeChild(document.querySelector('.success'));
       document.removeEventListener('keydown', onEscKeydown);
+      document.removeEventListener('click', onDocumentClick);
     }
   };
 
-  var onClickWindow = function () {
+  var onDocumentClick = function () {
     MAIN_BLOCK.removeChild(document.querySelector('.success'));
-    document.removeEventListener('click', onClickWindow);
+    document.removeEventListener('click', onDocumentClick);
+    document.removeEventListener('keydown', onEscKeydown);
   };
 
-  // var onClickButtonError = function () {
-  //   MAIN_BLOCK.removeChild(document.querySelector('.error'));
-  //   console.log('rabotai');
-  // };
+  var showSuccessMessage = function () {
+    var successMessage = SUCCESS_MESSAGE_TEMPLATE.cloneNode(true);
+    MAIN_BLOCK.appendChild(successMessage);
+    document.addEventListener('keydown', onEscKeydown);
+    document.addEventListener('click', onDocumentClick);
+  };
 
   window.backend = {
     upload: upload,
@@ -93,7 +111,4 @@
     showSuccessMessage: showSuccessMessage,
     showErrorMessage: showErrorMessage
   };
-
-  // showErrorMessage();
-  // showSuccessMessage();
 })();
